@@ -2,12 +2,12 @@ import React from 'react';
 import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {THEME} from '../theme';
 
-export const Post = ({item, goToPost}) => {
+export const Post = ({item, goToPost, onDelete}) => {
   return (
     <TouchableOpacity onPress={() => goToPost(item)}>
       <View style={styles.container}>
         <View style={styles.textWrapper}>
-          <Text>post # {item.id}</Text>
+          <Text style={{color: THEME.COLORS.GREY}}>Пост №{item.id}</Text>
           <Text style={styles.date}>
             Дата: {new Date().toLocaleDateString()}
           </Text>
@@ -16,7 +16,7 @@ export const Post = ({item, goToPost}) => {
         <View style={styles.buttonArea}>
           <Button
             title="Delete post"
-            onPress={() => console.log('button pressed')}
+            onPress={() => onDelete(item.id)}
             color={THEME.COLORS.RED}
           />
         </View>
