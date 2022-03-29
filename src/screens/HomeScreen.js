@@ -1,26 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {Loader} from '../components/Loader';
 import {Post} from '../components/Post';
 
 export const HomeScreen = ({navigation}) => {
   const postsPerPage = 5;
   const [data, setData] = useState([]);
-  const [postsLimit, setPostsLimit] = useState(postsPerPage);
+  const [isLoading, setIsLoading] = useState(false);
+  const [postsStart, setPostsStart] = useState(0);
 
-  const getData = limit => {
-    const requestUrl = `https://jsonplaceholder.typicode.com/posts?_start=0&_limit=${limit}`;
+  const getData = async start => {
+    const requestUrl = `https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=5`;
     fetch(requestUrl)
       .then(response => response.json())
-      .then(json => setData(json))
+      .then(json => {
+        setData(prevData => prevData.concat(json));
+        setIsLoading(false);
+      })
       .catch(error => console.error(error));
   };
 
   useEffect(() => {
-    getData(postsLimit);
-  }, [postsLimit]);
-  useEffect(() => {
-    console.log('length: ' + data.length);
-  }, [data]);
+    setIsLoading(true);
+    getData(postsStart);
+  }, [postsStart]);
 
   const goToPost = post => {
     navigation.navigate('PostScreen', {post});
@@ -28,16 +31,21 @@ export const HomeScreen = ({navigation}) => {
 
   const handlerLoadMore = () => {
     console.log('handlerLoadMore');
-    setPostsLimit(prevValue => prevValue + postsPerPage);
+    setPostsStart(prevValue => prevValue + postsPerPage);
   };
+  const loader = () => {
+    return isLoading ? <Loader /> : null;
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
         keyExtractor={item => item.id}
         renderItem={({item}) => <Post item={item} goToPost={goToPost} />}
-        onEndReached={handlerLoadMore}
         onEndReachedThreshold={0}
+        onEndReached={handlerLoadMore}
+        ListFooterComponent={loader}
       />
     </View>
   );

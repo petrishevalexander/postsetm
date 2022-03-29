@@ -1,39 +1,55 @@
 import React from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-// import { THEME } from "../theme";
+import {Button, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {THEME} from '../theme';
 
 export const Post = ({item, goToPost}) => {
   return (
     <TouchableOpacity onPress={() => goToPost(item)}>
       <View style={styles.container}>
-        <Text>{item.id + '. ' + item.title}</Text>
+        <View style={styles.textWrapper}>
+          <Text>post # {item.id}</Text>
+          <Text style={styles.date}>
+            Дата: {new Date().toLocaleDateString()}
+          </Text>
+          <Text style={styles.title}>{item.title} </Text>
+        </View>
+        <View style={styles.buttonArea}>
+          <Button
+            title="Delete post"
+            onPress={() => console.log('button pressed')}
+            color={THEME.COLORS.RED}
+          />
+        </View>
       </View>
     </TouchableOpacity>
-    // <TouchableOpacity onPress={() => goToPost(post)}>
-    //   <View style={styles.container}>
-    //     <ImageBackground source={{ uri: post.img }} style={styles.image}>
-    //       <View style={styles.textWrapper}>
-    //         <Text style={styles.text}>
-    //           {new Date(post.date).toLocaleDateString()}
-    //         </Text>
-    //       </View>
-    //     </ImageBackground>
-    //   </View>
-    // </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: 'space-around',
     borderWidth: 2,
+    borderColor: THEME.COLORS.MAIN,
     marginVertical: 5,
     width: '100%',
     height: 200,
+  },
+  textWrapper: {
+    justifyContent: 'center',
+    padding: 5,
+  },
+  date: {
+    fontSize: 16,
+    color: THEME.COLORS.MAIN_LIGHT,
+  },
+  title: {
+    fontWeight: '600',
+    fontSize: 24,
+    color: THEME.COLORS.MAIN_DARK,
+  },
+  buttonArea: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
