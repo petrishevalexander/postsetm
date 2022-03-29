@@ -1,11 +1,20 @@
 import React from 'react';
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 // import { THEME } from "../theme";
 
-export const Post = ({item}) => {
+export const Post = ({item, goToPost}) => {
   return (
-    <Text>{item.id + '. ' + item.title}</Text>
+    <TouchableOpacity onPress={() => goToPost(item)}>
+      <View style={styles.container}>
+        <Text>{item.id + '. ' + item.title}</Text>
+      </View>
+    </TouchableOpacity>
     // <TouchableOpacity onPress={() => goToPost(post)}>
     //   <View style={styles.container}>
     //     <ImageBackground source={{ uri: post.img }} style={styles.image}>
@@ -20,4 +29,11 @@ export const Post = ({item}) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    borderWidth: 2,
+    marginVertical: 5,
+    width: '100%',
+    height: 200,
+  },
+});

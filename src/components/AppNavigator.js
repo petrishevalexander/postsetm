@@ -10,8 +10,8 @@ export const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Post" component={PostScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="PostScreen" component={PostScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
