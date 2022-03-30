@@ -7,36 +7,29 @@ import {deletePost, setPosts} from '../store/actions';
 
 export const HomeScreen = ({navigation}) => {
   const postsPerPage = 5;
-  // const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [postsStart, setPostsStart] = useState(0);
 
   const data = useSelector(state => state.postReducer.data);
   const dispatch = useDispatch();
 
-  const getData = async start => {
-    const requestUrl = `https://jsonplaceholder.typicode.com/posts?_start=${start}&_limit=5`;
-    await fetch(requestUrl)
+  useEffect(() => {
+    setIsLoading(true);
+    const requestUrl = `https://jsonplaceholder.typicode.com/posts?_start=${postsStart}&_limit=5`;
+    fetch(requestUrl)
       .then(response => response.json())
       .then(json => {
         dispatch(setPosts(json));
-        // setData(prevData => prevData.concat(json));
         setIsLoading(false);
       })
       .catch(error => console.error(error));
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-    getData(postsStart);
-  }, [postsStart]);
+  }, [dispatch, postsStart]);
 
   const goToPost = post => {
     navigation.navigate('PostScreen', {post});
   };
 
   const handlerLoadMore = () => {
-    console.log('handlerLoadMore');
     setPostsStart(prevValue => prevValue + postsPerPage);
   };
   const loader = () => {
@@ -48,11 +41,11 @@ export const HomeScreen = ({navigation}) => {
       `Вы уверены, что хотите удалить пост №${id}?`,
       [
         {
-          text: 'Cancel',
+          text: 'Отменить',
           style: 'cancel',
         },
         {
-          text: 'Delete',
+          text: 'Удалить',
           onPress: async () => {
             await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
               method: 'DELETE',
@@ -73,7 +66,7 @@ export const HomeScreen = ({navigation}) => {
         renderItem={({item}) => (
           <Post item={item} goToPost={goToPost} onDelete={onDelete} />
         )}
-        onEndReachedThreshold={0}
+        onEndReachedThreshold={0.01}
         onEndReached={handlerLoadMore}
         ListFooterComponent={loader}
       />

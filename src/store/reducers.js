@@ -1,7 +1,8 @@
-import {DELETE_POST, SET_POSTS} from './types';
+import {DELETE_POST, GET_COMMENTS, SET_POSTS} from './types';
 
 const initialState = {
   data: [],
+  comments: [],
 };
 
 export const postReducer = (state = initialState, action) => {
@@ -15,6 +16,11 @@ export const postReducer = (state = initialState, action) => {
       return {
         ...state,
         data: state.data.filter(post => post.id !== action.payload),
+      };
+    case GET_COMMENTS:
+      return {
+        ...state,
+        comments: [...action.payload],
       };
     default:
       return state;
